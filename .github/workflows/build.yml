@@ -12,6 +12,9 @@ on:
     paths-ignore:
       - '*.md'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,12 +23,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: "src"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout builds
         uses: actions/checkout@v4
         with:
           ref: "builds"
           path: "builds"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clean old builds
         run: rm $GITHUB_WORKSPACE/builds/*.cs3 || true
@@ -44,14 +49,18 @@ jobs:
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
-          cp build/plugins.json $GITHUB_WORKSPACE/builds
+
+      - name: Copy artifacts
+        run: |
+          find $GITHUB_WORKSPACE/src -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds/ \;
+          cp $GITHUB_WORKSPACE/src/build/plugins.json $GITHUB_WORKSPACE/builds/
 
       - name: Push builds
         run: |
           cd $GITHUB_WORKSPACE/builds
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add .
           git commit --amend -m "Build $GITHUB_SHA" || exit 0
           git push --force
