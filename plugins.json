@@ -1,0 +1,21 @@
+[
+    {
+        "fileHash": "sha256-a1da05abf47eb475ad28b5979bcb684a61bf597dcf1558f75f8f01ceefbde6ec",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Subrata96411/jiotv-cloudstream",
+        "fileSize": 21528,
+        "status": 1,
+        "authors": [
+            "TechieSneh",
+            "LO"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 1,
+        "internalName": "JioTvProvider",
+        "description": "JioTV Live Channels Plugin",
+        "url": "https://raw.githubusercontent.com/Subrata96411/jiotv-cloudstream/builds/JioTvProvider.cs3",
+        "name": "JioTvProvider"
+    }
+]
